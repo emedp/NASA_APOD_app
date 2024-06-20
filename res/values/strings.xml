@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">APOD</string>
+    <string name="copyright_title">Image credits and Copyright: %1$s</string>
+    <string name="version_title">API version: %1$s</string>
+    <string name="instruction">Click on title to show or hide description and click on date to open calendar</string>
+    <string name="select_date">Select date</string>
+    <string name="error_load_data">Can not load data. Try again</string>
+    <string name="error_load_media">Can not load media. Try again</string>
+    <string name="open_website">Open APOD website</string>
+</resources>

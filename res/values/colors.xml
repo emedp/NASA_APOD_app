@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="nasa_red">#fffc3d21</color>
+    <color name="nasa_blue">#ff0b3d91</color>
+</resources>
