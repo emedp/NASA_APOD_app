@@ -49,9 +49,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvVersion: TextView
     private lateinit var tvTitle: TextView
     private lateinit var tvExplanation: TextView
-    private lateinit var tvInstruction: TextView
     private lateinit var tvCopyright: TextView
-    private lateinit var pbMedia: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var ivPicture: ImageView
     private lateinit var vvVideo: VideoView
 
@@ -66,6 +65,9 @@ class MainActivity : AppCompatActivity() {
         val todayDay = today.get(Calendar.DATE)
         val todayMonth = today.get(Calendar.MONTH) + 1
         val todayYear = today.get(Calendar.YEAR)
+        var selectedDay: Int
+        var selectedMonth: Int
+        var selectedYear: Int
 
         // UI BLOCK CODE
         bOpenInBrowser = findViewById(R.id.b_website)
@@ -75,9 +77,8 @@ class MainActivity : AppCompatActivity() {
         tvVersion = findViewById(R.id.tv_version)
         tvTitle = findViewById(R.id.tv_title)
         tvExplanation = findViewById(R.id.tv_explanation)
-        tvInstruction = findViewById(R.id.tv_instruction)
         tvCopyright = findViewById(R.id.tv_copyright)
-        pbMedia = findViewById(R.id.pb_media)
+        progressBar = findViewById(R.id.progress_bar)
         ivPicture = findViewById(R.id.picture)
         vvVideo = findViewById(R.id.video)
 
@@ -114,7 +115,10 @@ class MainActivity : AppCompatActivity() {
         calendarView.maxDate = today.timeInMillis
         calendarView.minDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse("1995-06-16").time
         calendarView.setOnDateChangeListener { _, year, month, day ->
-            Log.d("CALENDAR.DATE_CHANGED", "yyyy/MM/dd: $year/${month + 1}/$day")
+            selectedYear = year
+            selectedMonth = month + 1
+            selectedDay = day
+            Log.d("CALENDAR.DATE_CHANGED", "yyyy/MM/dd: $selectedYear/$selectedMonth/$selectedDay")
             // view.date = SimpleDateFormat("yyyy-MM-dd").parse("$year-${month + 1}-$day").time
             showUI(false)
             requestJson(year, month + 1, day)
@@ -178,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                     requestImage(mediaUrl)
                     // ivPicture.setOnClickListener { requestImage(mediaUrlHD) } // TODO: future feature to open in pop-up
                 } else if (mediaType == "video") {
-                    pbMedia.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                     vvVideo.visibility = View.VISIBLE
                     val mediaController = MediaController(this)
                     vvVideo.setVideoURI(Uri.parse(mediaUrl))
@@ -196,12 +200,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestImage (url: String) {
-        pbMedia.visibility = View.VISIBLE
         ivPicture.setImageBitmap(null)
         requestQueue.add(ImageRequest(url,
             {
                 Log.d("URL_IMAGE_VIEW", url)
-                pbMedia.visibility = View.GONE
+                progressBar.visibility = View.GONE
                 ivPicture.visibility = View.VISIBLE
                 ivPicture.setImageBitmap(it)
             }, 0, 0, ScaleType.FIT_XY, Bitmap.Config.ALPHA_8,
@@ -213,19 +216,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun showUI (canSee: Boolean) {
         if (canSee) {
+            ivInfo.visibility = View.VISIBLE
+            bDate.visibility = View.VISIBLE
             tvTitle.visibility = View.VISIBLE
-            tvExplanation.visibility = View.GONE
-            tvInstruction.visibility = View.VISIBLE
+            tvExplanation.visibility = View.VISIBLE
             tvCopyright.visibility = View.VISIBLE
+            bOpenInBrowser.visibility = View.VISIBLE
+            tvVersion.visibility = View.VISIBLE
         }  else {
+            progressBar.visibility = View.VISIBLE
+            ivInfo.visibility = View.GONE
+            bDate.visibility = View.GONE
             calendarView.visibility = View.GONE
             tvTitle.visibility = View.GONE
             tvExplanation.visibility = View.GONE
-            tvInstruction.visibility = View.GONE
             tvCopyright.visibility = View.GONE
             ivPicture.visibility = View.GONE
-            pbMedia.visibility = View.GONE
             vvVideo.visibility = View.GONE
+            bOpenInBrowser.visibility = View.GONE
+            tvVersion.visibility = View.GONE
         }
     }
 }
