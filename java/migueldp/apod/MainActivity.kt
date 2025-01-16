@@ -167,7 +167,10 @@ class MainActivity : AppCompatActivity() {
 
                 tvVersion.text = getString(R.string.version_title, version)
                 bDate.text = date
-                tvCopyright.text = getString(R.string.copyright_title, copyright.replace("\n", ""))
+                if (copyright != "")
+                    tvCopyright.text = getString(R.string.copyright_title, copyright.replace("\n", ""))
+                else
+                    tvCopyright.text = null
 
                 Log.d("MEDIA_TYPE", mediaType)
                 Log.d("MEDIA_URL", mediaUrl)
