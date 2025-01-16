@@ -9,4 +9,7 @@
     <string name="error_load_data">Can not load data. Try again</string>
     <string name="error_load_media">Can not load media. Try again</string>
     <string name="open_website">Open APOD website</string>
+    <string name="api_key">API Key</string>
+    <string name="api_key_insert">Go to api.nasa.gov web and get your API key. Then insert here</string>
+    <string name="api_key_saved">API Key saved successfully</string>
 </resources>

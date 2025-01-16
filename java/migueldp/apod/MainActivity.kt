@@ -1,6 +1,8 @@
 package migueldp.apod
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ImageView.ScaleType
 import android.widget.MediaController
@@ -17,6 +20,7 @@ import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.edit
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageRequest
@@ -33,9 +37,11 @@ import java.util.Calendar
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
 
     private val API_BASE_URL = "https://api.nasa.gov/planetary/apod"
-    private val API_KEY = "?api_key=UTlIi0X8KgXFRVW7zso7lVbMIRf2nTQ4apLTCyRM"
+    private val API_KEY = "?api_key="
+    private var apiKey: String = ""
     private val API_DATE = "&date="
 
     private lateinit var translator: Translator
@@ -61,15 +67,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // VAR AND VAL HELPERS
         val today = Calendar.getInstance()
-        val todayDay = today.get(Calendar.DATE)
-        val todayMonth = today.get(Calendar.MONTH) + 1
-        val todayYear = today.get(Calendar.YEAR)
         var selectedDay: Int
         var selectedMonth: Int
         var selectedYear: Int
 
-        // UI BLOCK CODE
+        // UI BINDING
         bOpenInBrowser = findViewById(R.id.b_website)
         bDate = findViewById(R.id.b_date)
         ivInfo = findViewById(R.id.iv_info)
@@ -82,8 +86,18 @@ class MainActivity : AppCompatActivity() {
         ivPicture = findViewById(R.id.picture)
         vvVideo = findViewById(R.id.video)
 
+        // FIRSTS
+        sharedPreferences = getSharedPreferences("APOD_PREFERENCES", Context.MODE_PRIVATE)
+        apiKey = sharedPreferences.getString("API_KEY", "").toString()
+        requestQueue = Volley.newRequestQueue(this)
         showUI(false)
 
+        if (apiKey == "")
+            requestAPIKey()
+        else
+            loadUI()
+
+        // UI LOGIC
         tvTitle.setOnClickListener {
             if (tvExplanation.visibility == View.GONE)
                 tvExplanation.visibility = View.VISIBLE
@@ -138,8 +152,6 @@ class MainActivity : AppCompatActivity() {
                 // Model downloaded successfully. Okay to start translating.
 
                 // https://google.github.io/volley/simple.html
-                requestQueue = Volley.newRequestQueue(this)
-                requestJson(todayYear, todayMonth, todayDay)
             }
             .addOnFailureListener { exception ->
                 // Model could not be downloaded or other internal error.
@@ -149,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestJson (year: Int, month: Int, day: Int) {
-        val requestURL = "$API_BASE_URL$API_KEY$API_DATE$year-$month-$day"
+        val requestURL = "$API_BASE_URL$API_KEY$apiKey$API_DATE$year-$month-$day"
         requestQueue.add(JsonObjectRequest(Request.Method.GET, requestURL, null,
             { response ->
                 Log.d("RESPONSE_JSON", response.toString())
@@ -236,5 +248,38 @@ class MainActivity : AppCompatActivity() {
             bOpenInBrowser.visibility = View.GONE
             tvVersion.visibility = View.GONE
         }
+    }
+
+    private fun saveApiKey () {
+        Log.d("API_KEY", apiKey)
+        Toast.makeText(this, getString(R.string.api_key_saved), Toast.LENGTH_SHORT).show()
+        sharedPreferences.edit {
+            putString("API_KEY", apiKey)
+            commit()
+        }
+    }
+
+    private fun requestAPIKey () {
+        val etApiKey = EditText(baseContext)
+        etApiKey.setTextColor(getColor(R.color.nasa_red))
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.api_key))
+            .setMessage(getString(R.string.api_key_insert))
+            .setView(etApiKey)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                apiKey = etApiKey.text.toString()
+                saveApiKey()
+                dialog.dismiss()
+                loadUI()
+            }
+            .show()
+    }
+
+    private fun loadUI () {
+        val today = Calendar.getInstance()
+        val todayDay = today.get(Calendar.DATE)
+        val todayMonth = today.get(Calendar.MONTH) + 1
+        val todayYear = today.get(Calendar.YEAR)
+        requestJson(todayYear, todayMonth, todayDay)
     }
 }

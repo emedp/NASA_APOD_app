@@ -10,4 +10,7 @@
     <string name="error_load_data">Error al cargar la información. Intentalo de nuevo</string>
     <string name="error_load_media">Error al cargar la multimedia. Intentalo de nuevo</string>
     <string name="open_website">Abrir web de APOD</string>
+    <string name="api_key">Clave de API</string>
+    <string name="api_key_insert">Ve a la web de api.nasa.gov y obtén tu clave API. Luego insertala aquí</string>
+    <string name="api_key_saved">Clave API guardada correctamente</string>
 </resources>
