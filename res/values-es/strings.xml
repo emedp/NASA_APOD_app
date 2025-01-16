@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">APOD</string>
+    <string name="ok">Vale</string>
+    <string name="info">Información</string>
     <string name="copyright_title">Créditos de imagen y Copyright: %1$s</string>
     <string name="version_title">Versión de API: %1$s</string>
     <string name="instruction">Clica el título para mostrar u ocultar la descripción y clica la fecha para abrir el calendario</string>

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">APOD</string>
+    <string name="ok">OK</string>
+    <string name="info">Info</string>
     <string name="copyright_title">Image credits and Copyright: %1$s</string>
     <string name="version_title">API version: %1$s</string>
     <string name="instruction">Click on title to show or hide description and click on date to open calendar</string>

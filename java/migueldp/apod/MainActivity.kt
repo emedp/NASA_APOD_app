@@ -3,7 +3,6 @@ package migueldp.apod
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,12 +15,14 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     // UI
     private lateinit var bOpenInBrowser: Button
     private lateinit var bDate: Button
+    private lateinit var ivInfo: ImageView
     private lateinit var calendarView: CalendarView
     private lateinit var tvVersion: TextView
     private lateinit var tvTitle: TextView
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         // UI BLOCK CODE
         bOpenInBrowser = findViewById(R.id.b_website)
         bDate = findViewById(R.id.b_date)
+        ivInfo = findViewById(R.id.iv_info)
         calendarView = findViewById(R.id.calendarView)
         tvVersion = findViewById(R.id.tv_version)
         tvTitle = findViewById(R.id.tv_title)
@@ -92,6 +95,15 @@ class MainActivity : AppCompatActivity() {
                 calendarView.visibility = View.VISIBLE
             else
                 calendarView.visibility = View.GONE
+        }
+
+        ivInfo.setOnClickListener {
+            MaterialAlertDialogBuilder(this)
+                .setIcon(AppCompatResources.getDrawable(this, R.drawable.baseline_info_24))
+                .setTitle(getString(R.string.info))
+                .setMessage(getString(R.string.instruction))
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()
         }
 
         bOpenInBrowser.setOnClickListener {
