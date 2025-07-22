@@ -1,0 +1,8 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.APOD" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/nasa_blue</item>
+        <item name="colorSecondary">@color/nasa_red</item>
+    </style>
+</resources>
